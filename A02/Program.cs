@@ -9,7 +9,7 @@
 using static System.Console;
 
 while (true) {
-   int numToGuess = 80, attempt = 0, guess = 0;
+   int numToGuess = new Random().Next(1,101), attempt = 0, guess = 0;
    while (guess != numToGuess) {
       Write ("Guess the number between 1 to 100: ");
       if (!int.TryParse (ReadLine (), out guess) || guess > 100 || guess < 1) {
