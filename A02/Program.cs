@@ -9,17 +9,16 @@
 using static System.Console;
 
 while (true) {
-   int numToGuess = new Random().Next(1,101), attempt = 0, guess = 0;
-   while (guess != numToGuess) {
+   int numToGuess = new Random ().Next (1, 101), attempt = 0;
+   while (true) {
       Write ("Guess the number between 1 to 100: ");
-      if (!int.TryParse (ReadLine (), out guess) || guess > 100 || guess < 1) {
+      if (!int.TryParse (ReadLine (), out int guess) || guess is < 1 or > 100) {
          WriteLine ("Invalid input.\n");
          continue;
       }
       attempt++;
       if (guess == numToGuess) break;
-      WriteLine (guess > numToGuess ?
-        "Your guess is high. Try again.\n" : "Your guess is low. Try again.\n");
+      WriteLine ($"Your guess is too {(guess > numToGuess ? "high" : "Low")}.\n");
    }
    Write ($"You guessed correctly in {attempt} attempt{(attempt > 1 ? "s" : "")}. " +
       $"The number is {numToGuess}." + $"\n\nPress Enter to play again!");
