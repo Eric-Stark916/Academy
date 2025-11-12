@@ -8,12 +8,12 @@
 // ------------------------------------------------------------------------------------------------
 using static System.Console;
 
-const int min = 1, max = 101;
+const int MIN = 1, MAX = 101;
 while (true) {
-   int numToGuess = new Random ().Next (min, max);
+   int numToGuess = new Random ().Next (MIN, MAX);
    while (true) {
       Write ("Guess the number between 1 to 100: ");
-      if (!int.TryParse (ReadLine (), out int guess) || guess is < min or >= max) {
+      if (!int.TryParse (ReadLine (), out int guess) || guess is < MIN or >= MAX) {
          WriteLine ("Invalid input.\n");
          continue;
       }
