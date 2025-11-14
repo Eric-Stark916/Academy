@@ -13,25 +13,24 @@ internal class Program {
    #region Implementation -------------------------------------------
    static void Main () {
       while (true) {
-         Write ("Please enter only letters (without space) to find the matching words, or 'X' to exit: ");
+         Write ("Please enter exactly 7 letters (without spaces) to find the matching words: ");
          var letters = ReadLine ()?.Trim ().ToUpper ();
-         if (letters == null || letters.Length == 0 || !letters.All (c => char.IsLetter (c))) continue;
-         if (letters.All (ch => ch == 'X')) break;
+         if (letters == null || letters.Length != 7 || !letters.All (c => char.IsLetter (c))) continue;
          WriteLine ();
          PrintSortedWords (letters);
+         break;
       }
    }
 
    // Prints the words that can be created using the given input.
    static void PrintSortedWords (string letters) {
       // Sorting the words.
-      var wordList = File.ReadAllLines ("C:/Work/Datas for code/words (1).txt");
-      var sortedWordList = wordList
-      .Where (word => word.Length >= 4 && word.Contains (letters[0])
-      && word.All (c => letters.Contains (c))).ToList ();
+      var words = File.ReadAllLines ("N:/98_Xchange/Data for coding/words (1).txt");
+      var sortedWords = words.Where (word => word.Length >= 4 && word.Contains (letters[0])
+                              && word.All (c => letters.Contains (c))).ToList ();
       // Scoring the words.
       Dictionary<string, int> scores = [];
-      foreach (var word in sortedWordList) {
+      foreach (var word in sortedWords) {
          int score = letters.All (l => word.Contains (l, StringComparison.CurrentCultureIgnoreCase))
             ? word.Length + 7 : word.Length > 4 ? word.Length : 1;
          scores.Add (word, score);
