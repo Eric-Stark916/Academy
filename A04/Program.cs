@@ -8,9 +8,9 @@
 // ------------------------------------------------------------------------------------------------
 using static System.Console;
 
-var wordList = File.ReadAllLines ("C:/Work/Datas for code/words (1).txt");
+var words = File.ReadAllLines ("N:/98_Xchange/Data for coding/words (1).txt").SelectMany (a => a);
 Dictionary<char, int> letterFreq = [];
-foreach (var ch in wordList.SelectMany (a => a))
+foreach (var ch in words)
    letterFreq[ch] = letterFreq.GetValueOrDefault (ch, 0) + 1;
 WriteLine ("Character - Frequency");
 foreach (var letter in letterFreq.OrderByDescending (a => a.Value).Take (7))
