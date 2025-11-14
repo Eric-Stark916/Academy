@@ -14,16 +14,16 @@ internal class Program {
    static void Main () {
       while (true) {
          Write ("Please enter only letters (without space) to find the matching words, or 'X' to exit: ");
-         var letters = ReadLine ()?.Trim ().ToUpper ();
-         if (letters == null || letters.Length == 0 || !letters.All (c => char.IsLetter (c))) continue;
-         if (letters.All (ch => ch == 'X')) break;
+         var letters = ReadLine ()?.Trim ().ToUpper ().ToCharArray ().ToList ();
+         if (letters == null || letters.Count == 0 || !letters.All (c => char.IsLetter (c))) continue;
+         if (letters[0] == 'X') break;
          WriteLine ();
          PrintSortedWords (letters);
       }
    }
 
    // Prints the words that can be created using the given input.
-   static void PrintSortedWords (string letters) {
+   static void PrintSortedWords (List<char> letters) {
       // Sorting the words.
       var wordList = File.ReadAllLines ("C:/Work/Datas for code/words (1).txt");
       var sortedWordList = wordList
@@ -37,10 +37,8 @@ internal class Program {
          scores.Add (word, score);
       }
       // Printing the words.
-      foreach (var word in scores.OrderByDescending (x => x.Value)) {
-         ForegroundColor = word.Value > word.Key.Length ? ConsoleColor.Green : ConsoleColor.Gray;
+      foreach (var word in scores.OrderByDescending (x => x.Value))
          WriteLine ($"{word.Value,2}. {word.Key}");
-      }
       WriteLine ($"--------\n{scores.Values.Sum ()} Total\n");
    }
    #endregion
