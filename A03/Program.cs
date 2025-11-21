@@ -6,7 +6,6 @@
 // Program on branch A03: Spell Bee.
 // This program is used to identify all words that can be formed using the provided letters.
 // ------------------------------------------------------------------------------------------------
-using System;
 using static System.Console;
 
 #region class Program -----------------------------------------------------------------------------
