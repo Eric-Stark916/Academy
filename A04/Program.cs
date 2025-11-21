@@ -8,7 +8,7 @@
 // ------------------------------------------------------------------------------------------------
 using static System.Console;
 
-var words = File.ReadAllLines ("N:/98_Xchange/Data for coding/words (1).txt").SelectMany (a => a);
+var words = File.ReadAllLines ("C:/etc/words.txt").SelectMany (a => a);
 Dictionary<char, int> letterFreq = [];
 foreach (var ch in words)
    letterFreq[ch] = letterFreq.GetValueOrDefault (ch, 0) + 1;
