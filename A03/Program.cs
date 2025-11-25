@@ -6,6 +6,7 @@
 // Program on branch A03: Spell Bee.
 // This program is used to identify all words that can be formed using the provided letters.
 // ------------------------------------------------------------------------------------------------
+using System.Text;
 using static System.Console;
 
 #region class Program -----------------------------------------------------------------------------
@@ -13,17 +14,17 @@ class Program {
    #region Implementation -------------------------------------------
    static void Main () {
       while (true) {
-         string letters = "";
+         var letters = new StringBuilder ();
          Write ("Please enter exactly 7 letters to find the matching words: ");
          while (letters.Length < 7) {
             char key = char.ToUpper (ReadKey (intercept: true).KeyChar);
             if (char.IsLetter (key)) {
                Write (key);
-               letters += key;
+               letters.Append (key);
             }
          }
          WriteLine ();
-         PrintSortedWords (letters);
+         PrintSortedWords (letters.ToString ());
          WriteLine ("Press any key to try again, or Esc to quit.");
          if (ReadKey (intercept: true).Key == ConsoleKey.Escape) break;
          WriteLine ();
@@ -38,10 +39,11 @@ class Program {
                                                            && word.All (c => letters.Contains (c))).ToList ();
       // Scoring the words.
       var scores = sortedWords.ToDictionary (word => word,
-         word => letters.All (l => word.Contains (l))
-         ? word.Length + 7 : word.Length > 4 ? word.Length : 1);
-      // Printing the words.
-      foreach (var score in scores.OrderByDescending (x => x.Value)) {
+         word => letters.All (l => word.Contains (l)) ?
+         word.Length + 7 : word.Length > 4 ? word.Length : 1);
+      // Printing the words along with sorted scores.
+      var sortedScores = scores.OrderByDescending (s => s.Value).ToList ();
+      foreach (var score in sortedScores) {
          ForegroundColor = score.Value > score.Key.Length ? ConsoleColor.Green : ConsoleColor.Gray;
          WriteLine ($"{score.Value,2}. {score.Key}");
       }
