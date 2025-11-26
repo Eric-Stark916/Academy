@@ -38,9 +38,8 @@ class Program {
                                                            && word.Contains (letters[0])
                                                            && word.All (c => letters.Contains (c))).ToList ();
       // Scoring the words.
-      var scores = sortedWords.ToDictionary (word => word,
-         word => letters.All (l => word.Contains (l)) ?
-         word.Length + 7 : word.Length > 4 ? word.Length : 1);
+      var scores = sortedWords.ToDictionary (word => word, word => letters.All (l => word.Contains (l)) ?
+                                             word.Length + 7 : word.Length > 4 ? word.Length : 1);
       // Printing the words along with sorted scores.
       var sortedScores = scores.OrderByDescending (s => s.Value).ToList ();
       foreach (var score in sortedScores) {
