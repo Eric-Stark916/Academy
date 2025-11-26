@@ -14,4 +14,4 @@ foreach (var ch in words)
    letterFreq[ch] = letterFreq.GetValueOrDefault (ch, 0) + 1;
 WriteLine ("Character - Frequency");
 foreach (var letter in letterFreq.OrderByDescending (a => a.Value).Take (7))
-   WriteLine ($"{letter.Key,5}{"-",6}{letter.Value,8}");
+   WriteLine ($"{letter.Key, 5}{"-", 6}{letter.Value, 8}");
