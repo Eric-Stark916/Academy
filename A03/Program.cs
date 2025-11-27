@@ -17,7 +17,7 @@ class Program {
          var letters = new StringBuilder ();
          Write ("Please enter exactly 7 letters to find the matching words: ");
          while (letters.Length < 7) {
-            char key = char.ToUpper (ReadKey (intercept: true).KeyChar);
+            char key = char.ToUpper (ReadKey (true).KeyChar);
             if (char.IsLetter (key)) {
                Write (key);
                letters.Append (key);
@@ -26,7 +26,7 @@ class Program {
          WriteLine ();
          PrintSortedWords (letters.ToString ());
          WriteLine ("Press any key to try again, or Esc to quit.");
-         if (ReadKey (intercept: true).Key == ConsoleKey.Escape) break;
+         if (ReadKey (true).Key == ConsoleKey.Escape) break;
          WriteLine ();
       }
    }
@@ -38,13 +38,18 @@ class Program {
                                                            && word.Contains (letters[0])
                                                            && word.All (c => letters.Contains (c))).ToList ();
       // Scoring the words.
-      var scores = sortedWords.ToDictionary (word => word, word => letters.All (l => word.Contains (l)) ?
-                                             word.Length + 7 : word.Length > 4 ? word.Length : 1);
+      var scores = sortedWords.ToDictionary (word => word, word => {
+         int wordLen = word.Length;
+         return letters.All (l => word.Contains (l)) ?
+         wordLen + 7 : wordLen > 4 ? wordLen : 1;
+      });
       // Printing the words along with sorted scores.
-      var sortedScores = scores.OrderByDescending (s => s.Value).ToList ();
-      foreach (var score in sortedScores) {
-         ForegroundColor = score.Value > score.Key.Length ? ConsoleColor.Green : ConsoleColor.Gray;
-         WriteLine ($"{score.Value,2}. {score.Key}");
+      int wordScore; string word;
+      foreach (var score in scores.OrderByDescending (s => s.Value)) {
+         wordScore = score.Value;
+         word = score.Key;
+         ForegroundColor = wordScore > word.Length ? ConsoleColor.Green : ConsoleColor.Gray;
+         WriteLine ($"{wordScore, 2}. {word}");
       }
       ResetColor ();
       WriteLine ($"--------\n{scores.Values.Sum ()} Total\n");
