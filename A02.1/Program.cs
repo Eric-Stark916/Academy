@@ -9,21 +9,25 @@
 using static System.Console;
 
 while (true) {
-   char key; int maxNum = 101, minNum = 0, midNum = 50; // maxNum=101 to include 100 in guessing.
+   char key; int maxNum = 100, minNum = 1, guess = 50; // maxNum=101 to include 100 in guessing.
    WriteLine ("Welcome to \"Computer Guessing Game\"\nThink of a number from 1 to 100 and press S to start the game.\n");
    while (char.ToLower (ReadKey (intercept: true).KeyChar) != 's');
    while (true) {
-      Write ($"My guess is {midNum}. Is your number higher(H), lower(L), or correct(S) ?");
+      Write ($"My guess is {guess}. Is your number higher(H), lower(L), or correct(S) ?");
       do key = char.ToLower (ReadKey (true).KeyChar);
       while (key is not ('h' or 'l' or 's'));
       Write ($"{key}\n");
-      if (key == 'h') minNum = midNum;
-      else if (key == 'l') maxNum = midNum;
-      else if (key == 's') break;
-      midNum = (maxNum + minNum) / 2;
-      if (midNum <= minNum) break;
+      if (key == 'h') minNum = guess + 1;
+      else if (key == 'l') maxNum = guess - 1;
+      else if (key == 's') {
+         WriteLine ($"\nFinally, I found the number! it's: {guess}. Press Enter to play again.\n");
+         break;
+      }
+      if (minNum > maxNum) {
+         WriteLine ("\nAh! I could not guess the number. Press Enter to play again.\n");
+         break;
+      }
+      guess = (maxNum + minNum) / 2;
    }
-   WriteLine ((key == 's' ? $"\nFinally, I found the number! it's: {midNum}." : "\nAh! I could not guess the number.") +
-                                                                                " Press Enter to play again.\n");
    if (ReadKey ().Key != ConsoleKey.Enter) break;
 }
