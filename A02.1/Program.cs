@@ -9,7 +9,7 @@
 using static System.Console;
 
 while (true) {
-   char key; int maxNum = 100, minNum = 1, guess = 50; // maxNum=101 to include 100 in guessing.
+   char key; int maxNum = 100, minNum = 1, guess = 50;
    WriteLine ("Welcome to \"Computer Guessing Game\"\nThink of a number from 1 to 100 and press S to start the game.\n");
    while (char.ToLower (ReadKey (intercept: true).KeyChar) != 's');
    while (true) {
