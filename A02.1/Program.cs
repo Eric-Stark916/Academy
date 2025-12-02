@@ -20,8 +20,9 @@ while (true) {
       if (key == 's') {
          WriteLine ($"\nFinally, I found the number! it's: {guess}. Press Enter to play again.\n");
          break;
-      } else if (key == 'h') minNum = guess + 1;
-      else if (key == 'l') maxNum = guess - 1;
+      }
+      if (key == 'h') minNum = guess + 1;
+      else maxNum = guess - 1;
       if (minNum > maxNum) {
          WriteLine ("\nAh! I could not guess the number. Press Enter to play again.\n");
          break;
