@@ -4,27 +4,23 @@
 // ------------------------------------------------------------------
 // Program.cs
 // Program on A02.1: Computer Guessing Game.
-// This program finds the number you are thinking, between 1 to 100 within 7 guesses.
+// This program finds the number you are thinking, between 0 to 100 within 7 guesses.
 // ------------------------------------------------------------------------------------------------
 using static System.Console;
 
 while (true) {
    char key; int maxNum = 100, minNum = 1, guess = 50;
-   WriteLine ("Welcome to \"Computer Guessing Game\"\nThink of a number from 1 to 100 and press S to start the game.\n");
-   while (char.ToLower (ReadKey (true).KeyChar) != 's');
+   WriteLine ("Welcome to \"Computer Guessing Game\"\nThink of a number from 0 to 100.\n");
    while (true) {
-      Write ($"My guess is {guess}. Is your number higher(H), lower(L), or correct(S) ?");
+      Write ($"My guess is {guess}. Is your number lower ? Yes(s) or No(n): ");
       do key = char.ToLower (ReadKey (true).KeyChar);
-      while (key is not ('h' or 'l' or 's'));
+      while (key is not ('s' or 'n'));
       Write ($"{key}\n");
-      if (key == 's') {
-         WriteLine ($"\nFinally, I found the number! it's: {guess}. Press Enter to play again.\n");
-         break;
-      }
-      if (key == 'h') minNum = guess + 1;
+      if (key == 'n') minNum = guess + 1;
       else maxNum = guess - 1;
       if (minNum > maxNum) {
-         WriteLine ("\nAh! I could not guess the number. Press Enter to play again.\n");
+         WriteLine ($"\nFinally, I found the number! it's: {(key == 's' ? guess - 1 : guess)}. " +
+                                                                $"Press Enter to play again.\n");
          break;
       }
       guess = (maxNum + minNum) / 2;
