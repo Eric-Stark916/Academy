@@ -12,14 +12,14 @@ while (true) {
    char key; int maxNum = 100, minNum = 1, guess = 50;
    WriteLine ("Welcome to \"Computer Guessing Game\"\nThink of a number from 0 to 100.\n");
    while (true) {
-      Write ($"My guess is {guess}. Is your number lower ? Yes(s) or No(n): ");
-      do key = char.ToLower (ReadKey (true).KeyChar);
-      while (key is not ('s' or 'n'));
+      Write ($"My guess is {guess, 3}. Is your number lower ? Press 'Y' for Yes or 'N' for No: ");
+      do key = char.ToUpper (ReadKey (true).KeyChar);
+      while (key is not ('Y' or 'N'));
       Write ($"{key}\n");
-      if (key == 'n') minNum = guess + 1;
+      if (key == 'N') minNum = guess + 1;
       else maxNum = guess - 1;
       if (minNum > maxNum) {
-         WriteLine ($"\nFinally, I found the number! it's: {(key == 's' ? guess - 1 : guess)}. " +
+         WriteLine ($"\nFinally, I found the number! it's: {(key == 'Y' ? guess - 1 : guess)}. " +
                                                                 $"Press Enter to play again.\n");
          break;
       }
