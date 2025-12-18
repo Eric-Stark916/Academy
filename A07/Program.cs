@@ -20,7 +20,7 @@ class Program {
          if (input == "X") break;
          if (Double.TryParse (input, out double result)) {
             WriteLine ($"The converted value: {result}");
-            //WriteLine ($"Adding five to the resultant {result + 5}"); // To check if the string is actually converted into number.
+            //WriteLine ($"Adding five to the resultant {result + 5}"); // To check if the string is actually converted into number
          } else WriteLine ("Format is wrong!");
       }
    }
@@ -31,14 +31,12 @@ class Program {
 #region class Double ------------------------------------------------------------------------------
 class Double {
    #region Implementation -------------------------------------------
-   // Checks whether the input character is a number.
+   // Checks whether the input character is a number
    static bool IsNum (char c) => c >= '0' && c <= '9';
    #endregion
 
    #region Method ---------------------------------------------------
-   /// <summary>
-   /// Converts a string representation of a number to a double equivalent and returns true if parsing succeeds; otherwise, false.
-   /// </summary>
+   /// <summary>Converts a string representation of a number to a double equivalent and returns true if parsing succeeds; otherwise, false</summary>
    public static bool TryParse (string str, out double result) {
       result = 0;
       if (string.IsNullOrWhiteSpace (str)) return false;
@@ -46,30 +44,30 @@ class Double {
       double numValue = 0; int dotPosition = 0, exponentValue = 0;
       bool isNegative = false, hasExponent = false, hasDot = false;
       int maxValue = 308, minValue = -324; // Maximum and minimum exponent values that double.Parse can handle without overflow
-      for (int i = 0; i < str.Length; i++) {
-         // Converts a string character to its equivalent number.
+      for (int i = 0, len = str.Length; i < len; i++) {
+         // Converts a string character to its equivalent number
          if (IsNum (str[i])) {
             numValue = numValue * 10 + (str[i] - '0');
             if (hasDot) dotPosition++;
             continue;
          }
-        // Checks for Exponential notation and value in the string.
+        // Checks for Exponential notation and value in the string
         else if (str[i] == 'E') {
-            if (hasExponent || i + 1 >= str.Length || !(i > 0 && IsNum (str[i - 1])))
+            if (hasExponent || i + 1 >= len || !(i > 0 && IsNum (str[i - 1])))
                return false;
-            if (!int.TryParse (str[(i + 1)..], out exponentValue) || 
+            if (!int.TryParse (str[(i + 1)..], out exponentValue) ||
                exponentValue > maxValue || exponentValue < minValue) return false;
             hasExponent = true;
             break;
          }
-        // Checks for dot in the string.
+        // Checks for dot in the string
         else if (str[i] == '.') {
-            if (hasDot || !(i > 0 && IsNum (str[i - 1]) && i + 1 < str.Length && IsNum (str[i + 1])))
+            if (hasDot || !(i > 0 && IsNum (str[i - 1]) && i + 1 < len && IsNum (str[i + 1])))
                return false;
             hasDot = true;
             continue;
          }
-         // Checks for leading sign.
+         // Checks for leading sign
          else if (i == 0) {
             if (str[i] == '-') {
                isNegative = true;
