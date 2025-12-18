@@ -45,12 +45,22 @@ class Double {
       str = str.Trim ().ToUpper ();
       double numValue = 0; int dotPosition = 0, exponentValue = 0;
       bool isNegative = false, hasExponent = false, hasDot = false;
+      int maxValue = 308, minValue = -324; // Maximum and minimum exponent values that double.Parse can handle without overflow
       for (int i = 0; i < str.Length; i++) {
          // Converts a string character to its equivalent number.
          if (IsNum (str[i])) {
             numValue = numValue * 10 + (str[i] - '0');
             if (hasDot) dotPosition++;
             continue;
+         }
+        // Checks for Exponential notation and value in the string.
+        else if (str[i] == 'E') {
+            if (hasExponent || i + 1 >= str.Length || !(i > 0 && IsNum (str[i - 1])))
+               return false;
+            if (!int.TryParse (str[(i + 1)..], out exponentValue) || 
+               exponentValue > maxValue || exponentValue < minValue) return false;
+            hasExponent = true;
+            break;
          }
         // Checks for dot in the string.
         else if (str[i] == '.') {
@@ -59,21 +69,13 @@ class Double {
             hasDot = true;
             continue;
          }
-        // Checks for Exponential notation and value in the string.
-        else if (str[i] == 'E') {
-            if (hasExponent || i + 1 >= str.Length || !(i > 0 && IsNum (str[i - 1])))
-               return false;
-            if (!int.TryParse (str[(i + 1)..], out exponentValue) || exponentValue > 308 || exponentValue < -324)
-               return false;
-            hasExponent = true;
-            break;
-         }
-        // Checks for leading sign.
-        else if (i == 0 && str[0] == '-') {
-            isNegative = true;
-            continue;
-         } else if (i == 0 && str[0] == '+') continue;
-         else return false;
+         // Checks for leading sign.
+         else if (i == 0) {
+            if (str[i] == '-') {
+               isNegative = true;
+               continue;
+            } else if (str[i] == '+') continue;
+         } else return false;
       }
       if (hasDot) numValue /= Math.Pow (10, dotPosition);
       if (hasExponent) numValue *= Math.Pow (10, exponentValue);
