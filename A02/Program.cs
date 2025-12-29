@@ -7,20 +7,48 @@
 // This program also provides feedback after each attempt.
 // ------------------------------------------------------------------------------------------------
 using static System.Console;
-
-const int MIN = 1, MAX = 101;
-while (true) {
-   int numToGuess = new Random ().Next (MIN, MAX);
-   while (true) {
-      Write ("Guess the number between 1 to 100: ");
-      if (!int.TryParse (ReadLine (), out int guess) || guess is < MIN or >= MAX) {
-         WriteLine ("Invalid input.\n");
-         continue;
+namespace TextEditor {
+   internal class Program {
+      static void Main () {
+         while (true) {
+            Write ("What operation to be done (ADD,DEL,UND,RED) or X to exit: ");
+            string result = ReadLine ()!.ToLower ();
+            while (result == "add") {
+               Write ("Enter the words to get added or 'X' to return to the main menu: ");
+               string input = ReadLine ()!;
+               if (input.ToLower () == "x") break;
+               WriteLine (Add (input));
+            }
+            while (result == "del") {
+               Write ("Enter the number of items to be deleted from the last or 'X' to return to the main menu: ");
+               string input = ReadLine ()!;
+               if (input?.ToLower () == "x") break;
+               if (int.TryParse (input, out int res))
+                  WriteLine (Del (res));
+               else WriteLine ("Wrong input");
+            }
+            if (result.ToLower () == "und") WriteLine (Undo ());
+            if (result.ToLower () == "red") WriteLine (Redo ());
+            if (result.ToLower () == "x") break;
+         }
       }
-      if (guess == numToGuess) break;
-      WriteLine ($"Your guess is too {(guess > numToGuess ? "high" : "Low")}.\n");
+      public static string output = "";
+      public static string Text = "";
+      public static string Add (string text) {
+         Text = text;
+         output += Text;
+         return output;
+      }
+      public static string Del (int num) {
+         string change = output;
+         Text = change.Substring (0, change.Length - num);
+         return change.Substring (0, change.Length - num);
+      }
+      public static string Undo () {
+         return output;
+      }
+      public static string Redo () {
+         return Text;
+      }
    }
-   Write ($"You guessed correctly. The number is {numToGuess}.\n\nPress Enter to play again!");
-   if (ReadKey ().Key != ConsoleKey.Enter) break;
-   Clear ();
 }
