@@ -6,21 +6,41 @@
 // This program lets the user guess a random number between 1 to 100.
 // This program also provides feedback after each attempt.
 // ------------------------------------------------------------------------------------------------
-using static System.Console;
+namespace DialRotation {
+   internal class Program {
 
-const int MIN = 1, MAX = 101;
-while (true) {
-   int numToGuess = new Random ().Next (MIN, MAX);
-   while (true) {
-      Write ("Guess the number between 1 to 100: ");
-      if (!int.TryParse (ReadLine (), out int guess) || guess is < MIN or >= MAX) {
-         WriteLine ("Invalid input.\n");
-         continue;
+      static void Main () {
+         int dialPos = 50;
+         int maxDialPos = 100;
+         int minDialPos = 0;
+         int count = 0;
+         while (true) {
+            Console.WriteLine ("Enter the number to get the dial indication:");
+            string input = Console.ReadLine ()!.ToLower ();
+            string input2 = input.Substring (1, input.Length - 1);
+            int output = 0;
+            if (int.TryParse (input2, out int result)) {
+               if (input.Contains ("l")) {
+                  output = dialPos - result;
+                  if (output == 0) count++;
+                  if (output < minDialPos) {
+                     output = maxDialPos + output;
+                     dialPos = output;
+                  }
+               }
+               if (input.Contains ("r")) {
+                  output = dialPos + result;
+                  if (output == 0) count++;
+                  if (output > maxDialPos) {
+                     output = minDialPos + (100 - output);
+                     dialPos = output;
+                  }
+               }
+               Console.WriteLine ($"Current Dial position {output} - Instruction {input}-number of zeros achieved{count}");
+
+            }
+         }
+
       }
-      if (guess == numToGuess) break;
-      WriteLine ($"Your guess is too {(guess > numToGuess ? "high" : "Low")}.\n");
    }
-   Write ($"You guessed correctly. The number is {numToGuess}.\n\nPress Enter to play again!");
-   if (ReadKey ().Key != ConsoleKey.Enter) break;
-   Clear ();
 }
