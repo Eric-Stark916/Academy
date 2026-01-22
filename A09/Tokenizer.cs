@@ -16,8 +16,9 @@ class Tokenizer {
             case '(' or ')': return new TPunctuation (ch);
             case '*' or '/' or '^' or '=': return new TOpArithmetic (mEval, ch);
             case '+' or '-':
-               return mEval.GetPrevToken is not TLiteral or TVariable ? new TOpUnary (mEval, ch)
-                                                                 : new TOpArithmetic (mEval, ch);
+               return mEval.GetPrevToken is TLiteral or TVariable or TPunctuation { Punct: ')' }
+                                                                    ? new TOpArithmetic (mEval, ch)
+                                                                    : new TOpUnary (mEval, ch);
             case >= 'a' and <= 'z': return GetIdentifier ();
             default: return new TError ($"Unknown symbol: {ch}");
          }

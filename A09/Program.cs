@@ -14,7 +14,7 @@ class Program {
          try {
             double result = eval.Evaluate (text);
             ForegroundColor = ConsoleColor.Green;
-            WriteLine (result);
+            WriteLine (Math.Round(result,3));
          } catch (Exception e) {
             ForegroundColor = ConsoleColor.Yellow;
             WriteLine (e.Message);

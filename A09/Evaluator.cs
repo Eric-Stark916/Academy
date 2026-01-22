@@ -14,8 +14,9 @@ class Evaluator {
    #region Method --------------------------------------------------------
    /// <summary>Evaluates an expression and returns its result.</summary>
    public double Evaluate (string text) {
-      List<Token> tokens = new ();
+      List<Token> tokens = [];
       var tokenizer = new Tokenizer (this, text);
+      // Reads the input and converts it into tokens.
       for (; ; )
       {
          var token = tokenizer.Next ();
@@ -26,10 +27,15 @@ class Evaluator {
       }
       TVariable? tVariable = null;
       // Checks if this is a variable assignment.
-      if (tokens.Count > 2 && tokens[0] is TVariable tvar && tokens[1] is TOpArithmetic { Op: '=' }) {
+      if (tokens.Count > 1 && tokens[0] is TVariable tvar && tokens[1] is TOpArithmetic { Op: '=' }) {
          tVariable = tvar;
          // Removes the first two tokens.
          tokens.RemoveRange (0, 2);
+      }
+      // Used to handle operators after a digits.
+      bool noLiteral = tokens.Skip (1).All (x => x is TOpArithmetic or TOpUnary); // Checks if any literals present after the digit.
+      if (tokens.Count>=2 && tokens[0] is TLiteral&&noLiteral ) {
+         if (tokens[1] is TOpArithmetic arth) tokens[1] = new TOpUnary (this,arth.Op);
       }
       foreach (var t in tokens) Process (t);
       while (mOperators.Count > 0) ApplyOperator ();
@@ -39,11 +45,9 @@ class Evaluator {
    }
    #endregion
 
-   // Base priority for operator or function evaluation.
-   public int BasePriority { get; private set; }
    #region Method --------------------------------------------------------
    public double GetVariable (string name) {
-      if (mVars.TryGetValue (name, out double f)) return f;
+      if (mVars.TryGetValue (name, out var f)) return f;
       throw new EvalException ($"Unknown variable: {name}");
    }
    #endregion
@@ -51,11 +55,14 @@ class Evaluator {
    #region Implementation ------------------------------------------------
    // Pops an operator and its operands, applies it, and pushes the result back.
    void ApplyOperator () {
+     
+     // if (mOperands.Count == 0) throw new EvalException ("Operands not Found");
       var op = mOperators.Pop ();
       var f1 = mOperands.Pop ();
       if (op is TOpFunction func) mOperands.Push (func.Evaluate (f1));
       else if (op is TOpUnary unary) mOperands.Push (unary.Apply (f1));
       else if (op is TOpArithmetic arith) {
+         if (mOperands.Count == 0) throw new EvalException ($"Wrong format.");
          var f2 = mOperands.Pop ();
          mOperands.Push (arith.Evaluate (f2, f1));
       }
@@ -69,8 +76,7 @@ class Evaluator {
             break;
          case TOperator op2:
             // Checks if the operator on the stack has higher priority than the current operator.
-            if (mOperators.Count > 0 && mOperators.Peek () is TOperator op1 && op1.Priority >= op2.Priority && !hasPunct) {
-               Console.WriteLine (mOperators.Peek ().Priority);
+            if (mOperators.Count > 0 && mOperators.Peek () is TOperator op1 && op1.Priority > op2.Priority && !hasPunct) {
                ApplyOperator ();
             }
             mOperators.Push (op2);

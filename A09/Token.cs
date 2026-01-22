@@ -45,7 +45,7 @@ abstract class TOperator : Token {
 class TOpArithmetic : TOperator {
    public TOpArithmetic (Evaluator eval, char ch) : base (eval) => Op = ch;
    public char Op { get; }
-   public override int Priority => sPriority[Op] + mEval.BasePriority;
+   public override int Priority => sPriority[Op];
 
    #region Implementation ------------------------------------------------
    static Dictionary<char, int> sPriority = new () {
@@ -77,7 +77,7 @@ class TOpArithmetic : TOperator {
 class TOpFunction : TOperator {
    public TOpFunction (Evaluator eval, string name) : base (eval) => Func = name;
    public string Func { get; }
-   public override int Priority => 4 + mEval.BasePriority;
+   public override int Priority => 4;
 
    #region Method --------------------------------------------------------
    public double Evaluate (double f) {
@@ -107,7 +107,7 @@ class TOpFunction : TOperator {
 class TOpUnary : TOperator {
    public TOpUnary (Evaluator eval, char ch) : base (eval) => Op = ch;
    public char Op { get; }
-   public override int Priority => 5 + mEval.BasePriority;
+   public override int Priority => 5;
 
    #region Method --------------------------------------------------------
    /// <summary>Applies the unary operator to the given value.<summary>
